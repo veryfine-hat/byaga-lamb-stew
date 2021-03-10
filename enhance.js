@@ -7,9 +7,7 @@ const enhance = ({
         write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
     });
     logger.annotate({
-        'meta.region': process.env.AWS_REGION,
-        'meta.function': process.env.AWS_LAMBDA_FUNCTION_NAME,
-        'meta.function_version': process.env.AWS_LAMBDA_FUNCTION_VERSION
+        'meta.region': process.env.AWS_REGION
     });
 
     return async (event, context = {}) => {

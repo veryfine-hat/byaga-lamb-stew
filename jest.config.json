@@ -1,0 +1,10 @@
+{
+  "coverageReporters": [
+    "text",
+    "lcov",
+    "cobertura"
+  ],
+  "coveragePathIgnorePatterns": [
+    "serviceWorker.js"
+  ]
+}

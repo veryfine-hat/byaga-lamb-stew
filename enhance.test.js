@@ -3,7 +3,7 @@ const { v4: uuid } = require('uuid');
 
 jest.mock('uuid');
 
-const runTest = (event) => {
+const runTest = (event, context) => {
     const log = jest.fn();
     const testMe = jest.fn();
     const childSpan = {
@@ -16,15 +16,18 @@ const runTest = (event) => {
         })
     };
     const lambda = enhance({
-        annotate: childSpan.annotate,
-        beginSpan: () => childSpan
+        logger: {
+            configure: jest.fn(),
+            annotate: childSpan.annotate,
+            beginSpan: () => childSpan
+        }
     }, testMe);
 
     return {
         log,
         logger: childSpan,
         lambda: testMe,
-        exec: () => lambda(event)
+        exec: () => lambda(event, context)
     };
 };
 
@@ -255,14 +258,13 @@ it('should attach the request id to future logs', async () => {
 });
 
 it('should attach the function name to all logs', async () => {
-    process.env.AWS_LAMBDA_FUNCTION_NAME = 'test-lambda';
     const event = {};
-    const { logger, exec } = runTest(event);
+    const { logger, exec } = runTest(event, {functionName: 'test-lambda'});
     await exec();
 
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
-        'system.function_name': 'test-lambda'
+        'meta.function_name': 'test-lambda'
     }));
 });
 
@@ -274,19 +276,18 @@ it('should attach the region to all logs', async () => {
 
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
-        'system.region': 'us-test-2'
+        'meta.region': 'us-test-2'
     }));
 });
 
 it('should attach the function version to all logs', async () => {
-    process.env.AWS_LAMBDA_FUNCTION_VERSION = '99';
     const event = {};
-    const { logger, exec } = runTest(event);
+    const { logger, exec } = runTest(event, {functionVersion: '99'});
     await exec();
 
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
-        'system.version': '99'
+        'meta.function_version': '99'
     }));
 });
 
