@@ -23,5 +23,6 @@
     "url": "http://gitlab.com/very-fine-hat/lamb-stew.git"
   },
   "types": "index.d.ts",
-  "typings": "index.d.ts"
+  "typings": "index.d.ts",
+  "webhook-test": 1
 }
