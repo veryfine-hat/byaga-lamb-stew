@@ -49,7 +49,7 @@ const enhance = ({
                 'request.ip_address': details.ipAddress,
                 'request.host': details.host,
                 'request.method': details.httpMethod,
-                'response.status': result ? result.status : 500,
+                'response.status': result ? result.statusCode : 500,
                 'metrics.execution_time_remaining_ms': context.getRemainingTimeInMillis ? context.getRemainingTimeInMillis() : undefined, ...pathData
             });
         }
