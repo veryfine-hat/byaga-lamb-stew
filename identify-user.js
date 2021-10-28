@@ -1,4 +1,5 @@
-const identifyUser = ({headers = {}}) => {
+const identifyUser = ({headers}) => {
+    headers = headers || {}
     const authHeader = headers.Authorization;
     if (!authHeader) return {error:"No Auth Found"}
 
