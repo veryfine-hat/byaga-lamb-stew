@@ -1,4 +1,5 @@
 const eventData = require("./lib/event-data");
+const {serverError} = require("./response");
 
 const enhance = ({
                      logger, onResponse = rsp => rsp
@@ -34,7 +35,7 @@ const enhance = ({
             });
         } catch (err) {
             span.exception(err);
-            throw err;
+            return onResponse(serverError())
         } finally {
             const pathData = Object.entries(event.pathParameters || {}).reduce((data, [k, v]) => {
                 data[`request.params.${k}`] = v;
