@@ -1,6 +1,6 @@
 {
   "name": "@byaga/lamb-stew",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "description": "Lambda Helper methods",
   "main": "./enhance.js",
   "scripts": {
