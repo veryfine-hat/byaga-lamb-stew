@@ -1,0 +1,133 @@
+{
+  "resource": "/",
+  "path": "/question-set",
+  "httpMethod": "GET",
+  "headers": {
+    "Accept": "application/json",
+    "Authorization": "Bearer eyJraWQiOiJkUW5LUHhSOGQzKzVXR01YMWJhUzhQXC9uczRjZlBUbXYyaEJpSEc2NkFMST0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2NTIxZTRlZi1kOTk1LTQ2NjAtYjcwZC01YjVkOGVjN2EwNTQiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNvZ25pdG86cHJlZmVycmVkX3JvbGUiOiJhcm46YXdzOmlhbTo6ODYwOTM1MTAyMjgwOnJvbGVcL21hZGxpYnMtYXV0aC1kZXZlbG9wLU1hZGxpYnNBdXRoRGV2ZWxvcEFkbWluUm9sZTBGLTFQRjYxWUtRQlpDT0giLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9pVllGaklaQTIiLCJjb2duaXRvOnVzZXJuYW1lIjoiNjUyMWU0ZWYtZDk5NS00NjYwLWI3MGQtNWI1ZDhlYzdhMDU0Iiwib3JpZ2luX2p0aSI6IjY1NzgxNGZjLWM3ZmQtNDk2Yi04Y2VmLWMzMjZjNjdlMzliZSIsImNvZ25pdG86cm9sZXMiOlsiYXJuOmF3czppYW06Ojg2MDkzNTEwMjI4MDpyb2xlXC9tYWRsaWJzLWF1dGgtZGV2ZWxvcC1NYWRsaWJzQXV0aERldmVsb3BBZG1pblJvbGUwRi0xUEY2MVlLUUJaQ09IIl0sImF1ZCI6ImhuZWNqNXRwcXJrbHV1ZW0yYjhvMmpjdSIsImV2ZW50X2lkIjoiOWI2MjY1YzQtNmU2Ny00ZWU2LWJkODEtZTg4MWU0Zjk3ZjRhIiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE2MzU2MDE4NDUsImV4cCI6MTYzNTYwNTQ0NSwiaWF0IjoxNjM1NjAxODQ1LCJqdGkiOiJiMTk3MDI5MS0yOTc4LTRkZTAtYTVjNC1iMjc3MzI0NWRmYmEiLCJlbWFpbCI6ImJyeWFuLmMucGVhc2VAZ21haWwuY29tIn0.IPibOGP0cjShz38-dTpJJGXITekibPXQgAyb50xVoidw32zejvGIZuxUJWDfszEVQN-dCiQE3VPLrmLKBhCqX918RTOr1iOisdEKcZBHeaQmdIh_bMoU7hQU-lmh61fyJwE5TIThmmeU6T4DthXSBdhvwyNr7N2V92GBqnmC8patkw6796eSN6gmA6zgmf89-8TEwllhqPzJaQi3bOB1emQ5MNc9J-fiYEgpqbam9BYJVoF7ZQu9q1Jpgzcd8pOKlIIxUpbRonZUT9VdRnh3DO4CZ1iZb-QyTUGx9CLsqftiWypZv5PTfpvCFJ9XD3JJ1vWzv9a7Hf2t-YFQzDoL-g",
+    "CloudFront-Forwarded-Proto": "https",
+    "CloudFront-Is-Desktop-Viewer": "true",
+    "CloudFront-Is-Mobile-Viewer": "false",
+    "CloudFront-Is-SmartTV-Viewer": "false",
+    "CloudFront-Is-Tablet-Viewer": "false",
+    "CloudFront-Viewer-Country": "US",
+    "content-type": "application/json",
+    "Host": "api.dev.madlibs.veryfinehat.net",
+    "User-Agent": "insomnia/2021.5.3",
+    "Via": "2.0 b1e146b21861bba9b3b88b326755189c.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "o0SjCudbJ4ckiSoX-cPgrRsPG2zqStdbho4O9x2yi2pUSWw16qnLoQ==",
+    "X-Amzn-Trace-Id": "Root=1-617d51be-43fb0be22b661d9065841f57",
+    "X-Forwarded-For": "47.187.95.238, 70.132.35.90",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "multiValueHeaders": {
+    "Accept": [
+      "application/json"
+    ],
+    "Authorization": [
+      "Bearer eyJraWQiOiJkUW5LUHhSOGQzKzVXR01YMWJhUzhQXC9uczRjZlBUbXYyaEJpSEc2NkFMST0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2NTIxZTRlZi1kOTk1LTQ2NjAtYjcwZC01YjVkOGVjN2EwNTQiLCJjb2duaXRvOmdyb3VwcyI6WyJhZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNvZ25pdG86cHJlZmVycmVkX3JvbGUiOiJhcm46YXdzOmlhbTo6ODYwOTM1MTAyMjgwOnJvbGVcL21hZGxpYnMtYXV0aC1kZXZlbG9wLU1hZGxpYnNBdXRoRGV2ZWxvcEFkbWluUm9sZTBGLTFQRjYxWUtRQlpDT0giLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9pVllGaklaQTIiLCJjb2duaXRvOnVzZXJuYW1lIjoiNjUyMWU0ZWYtZDk5NS00NjYwLWI3MGQtNWI1ZDhlYzdhMDU0Iiwib3JpZ2luX2p0aSI6IjY1NzgxNGZjLWM3ZmQtNDk2Yi04Y2VmLWMzMjZjNjdlMzliZSIsImNvZ25pdG86cm9sZXMiOlsiYXJuOmF3czppYW06Ojg2MDkzNTEwMjI4MDpyb2xlXC9tYWRsaWJzLWF1dGgtZGV2ZWxvcC1NYWRsaWJzQXV0aERldmVsb3BBZG1pblJvbGUwRi0xUEY2MVlLUUJaQ09IIl0sImF1ZCI6ImhuZWNqNXRwcXJrbHV1ZW0yYjhvMmpjdSIsImV2ZW50X2lkIjoiOWI2MjY1YzQtNmU2Ny00ZWU2LWJkODEtZTg4MWU0Zjk3ZjRhIiwidG9rZW5fdXNlIjoiaWQiLCJhdXRoX3RpbWUiOjE2MzU2MDE4NDUsImV4cCI6MTYzNTYwNTQ0NSwiaWF0IjoxNjM1NjAxODQ1LCJqdGkiOiJiMTk3MDI5MS0yOTc4LTRkZTAtYTVjNC1iMjc3MzI0NWRmYmEiLCJlbWFpbCI6ImJyeWFuLmMucGVhc2VAZ21haWwuY29tIn0.IPibOGP0cjShz38-dTpJJGXITekibPXQgAyb50xVoidw32zejvGIZuxUJWDfszEVQN-dCiQE3VPLrmLKBhCqX918RTOr1iOisdEKcZBHeaQmdIh_bMoU7hQU-lmh61fyJwE5TIThmmeU6T4DthXSBdhvwyNr7N2V92GBqnmC8patkw6796eSN6gmA6zgmf89-8TEwllhqPzJaQi3bOB1emQ5MNc9J-fiYEgpqbam9BYJVoF7ZQu9q1Jpgzcd8pOKlIIxUpbRonZUT9VdRnh3DO4CZ1iZb-QyTUGx9CLsqftiWypZv5PTfpvCFJ9XD3JJ1vWzv9a7Hf2t-YFQzDoL-g"
+    ],
+    "CloudFront-Forwarded-Proto": [
+      "https"
+    ],
+    "CloudFront-Is-Desktop-Viewer": [
+      "true"
+    ],
+    "CloudFront-Is-Mobile-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-SmartTV-Viewer": [
+      "false"
+    ],
+    "CloudFront-Is-Tablet-Viewer": [
+      "false"
+    ],
+    "CloudFront-Viewer-Country": [
+      "US"
+    ],
+    "content-type": [
+      "application/json"
+    ],
+    "Host": [
+      "api.dev.madlibs.veryfinehat.net"
+    ],
+    "User-Agent": [
+      "insomnia/2021.5.3"
+    ],
+    "Via": [
+      "2.0 b1e146b21861bba9b3b88b326755189c.cloudfront.net (CloudFront)"
+    ],
+    "X-Amz-Cf-Id": [
+      "o0SjCudbJ4ckiSoX-cPgrRsPG2zqStdbho4O9x2yi2pUSWw16qnLoQ=="
+    ],
+    "X-Amzn-Trace-Id": [
+      "Root=1-617d51be-43fb0be22b661d9065841f57"
+    ],
+    "X-Forwarded-For": [
+      "47.187.95.238, 70.132.35.90"
+    ],
+    "X-Forwarded-Port": [
+      "443"
+    ],
+    "X-Forwarded-Proto": [
+      "https"
+    ]
+  },
+  "queryStringParameters": null,
+  "multiValueQueryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourceId": "s323iszg42",
+    "authorizer": {
+      "claims": {
+        "sub": "6521e4ef-d995-4660-b70d-5b5d8ec7a054",
+        "cognito:groups": "admin",
+        "email_verified": "false",
+        "cognito:preferred_role": "arn:aws:iam::860935102280:role/madlibs-auth-develop-MadlibsAuthDevelopAdminRole0F-1PF61YKQBZCOH",
+        "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_iVYFjIZA2",
+        "cognito:username": "6521e4ef-d995-4660-b70d-5b5d8ec7a054",
+        "origin_jti": "657814fc-c7fd-496b-8cef-c326c67e39be",
+        "cognito:roles": "arn:aws:iam::860935102280:role/madlibs-auth-develop-MadlibsAuthDevelopAdminRole0F-1PF61YKQBZCOH",
+        "aud": "hnecj5tpqrkluuem2b8o2jcu",
+        "event_id": "9b6265c4-6e67-4ee6-bd81-e881e4f97f4a",
+        "token_use": "id",
+        "auth_time": "1635601845",
+        "exp": "Sat Oct 30 14:50:45 UTC 2021",
+        "iat": "Sat Oct 30 13:50:45 UTC 2021",
+        "jti": "b1970291-2978-4de0-a5c4-b2773245dfba",
+        "email": "bryan.c.pease@gmail.com"
+      }
+    },
+    "resourcePath": "/",
+    "httpMethod": "GET",
+    "extendedRequestId": "IBm1yH7JIAMFSYQ=",
+    "requestTime": "30/Oct/2021:14:07:58 +0000",
+    "path": "/question-set",
+    "accountId": "860935102280",
+    "protocol": "HTTP/1.1",
+    "stage": "develop",
+    "domainPrefix": "api",
+    "requestTimeEpoch": 1635602878496,
+    "requestId": "49fccf2b-e694-4e7f-9d10-110c2893f25c",
+    "identity": {
+      "cognitoIdentityPoolId": null,
+      "accountId": null,
+      "cognitoIdentityId": null,
+      "caller": null,
+      "sourceIp": "47.187.95.238",
+      "principalOrgId": null,
+      "accessKey": null,
+      "cognitoAuthenticationType": null,
+      "cognitoAuthenticationProvider": null,
+      "userArn": null,
+      "userAgent": "insomnia/2021.5.3",
+      "user": null
+    },
+    "domainName": "api.dev.madlibs.veryfinehat.net",
+    "apiId": "k9hcb0la03"
+  },
+  "body": null,
+  "isBase64Encoded": false
+}

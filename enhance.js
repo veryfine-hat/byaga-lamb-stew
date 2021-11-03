@@ -1,9 +1,18 @@
 const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
+const cors = require("./response/cors");
 
 const enhance = ({
-                     logger, onResponse = rsp => rsp
+                     logger, onResponse = rsp => rsp,
+    enableCors
                  }, lambda) => {
+    const buildResponse = (rsp, event) => {
+        if (enableCors) {
+            rsp = cors(event, rsp, enableCors === true ? undefined : enableCors)
+        }
+        return onResponse(rsp)
+    }
+
     logger.configure({
         write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
     });
@@ -35,7 +44,7 @@ const enhance = ({
             });
         } catch (err) {
             span.exception(err);
-            return onResponse(serverError())
+            return buildResponse(serverError(), event)
         } finally {
             const pathData = Object.entries(event.pathParameters || {}).reduce((data, [k, v]) => {
                 data[`request.params.${k}`] = v;
@@ -55,7 +64,7 @@ const enhance = ({
             });
         }
 
-        return onResponse(result);
+        return buildResponse(result, event);
     };
 };
 

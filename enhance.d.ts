@@ -16,23 +16,24 @@ export interface IHttpLambdaEvent {
 }
 
 export interface IHttpLambdaHeaders {
-    'x-forwarded-referrer'?: string
-    referrer?: string
-    referer?: string
-    host?: string
-    "x-forwarded-user-agent"?: string
-    "user-agent"?: string
-    "accept-language"?: string
-    "cache-control"?: string
-    "cloudfront-is-desktop-viewer"?: string
-    "cloudfront-is-mobile-viewer"?: string
-    "cloudfront-is-smarttv-viewer"?: string
-    "cloudfront-is-tablet-viewer"?: string
-    'x-viewer-country'?: string
-    "cloudfront-viewer-country"?: string
-    'x-forwarded-for'?: string
-    'x-span-id'?: string
-    'x-correlation-id'?: string
+    'X-Forwarded-Referrer'?: string
+    Referrer?: string
+    Referer?: string
+    Host?: string
+    "X-Forwarded-User-Agent"?: string
+    "User-Agent"?: string
+    "Accept-Language"?: string
+    "Cache-Control"?: string
+    "Cloudfront-Is-Desktop-Viewer"?: string
+    "Cloudfront-Is-Mobile-Viewer"?: string
+    "Cloudfront-Is-Smarttv-Viewer"?: string
+    "Cloudfront-Is-Tablet-Viewer"?: string
+    'X-Viewer-Country'?: string
+    "Cloudfront-Viewer-Country"?: string
+    'X-Forwarded-For'?: string
+    'X-Span-Id'?: string
+    'X-Correlation-Id'?: string,
+    [p: string]: string
 }
 
 export interface IHttpLambdaIdentity {
@@ -67,6 +68,7 @@ export interface IEnhancedContext extends ILambdaContext {
 
 export interface IHttpLambdaResponse {
     statusCode: number,
+    headers?: IHttpLambdaHeaders,
     body: any
 }
 
