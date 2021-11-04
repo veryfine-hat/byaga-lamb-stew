@@ -2,7 +2,7 @@
  * Adds cors headers to the response
  * @param {IHttpLambdaEvent} event
  * @param {IHttpLambdaResponse|any} rsp
- * @param {CorsOptions?} options - cors options
+ * @param {ICorsOptions?} options - cors options
  * @returns {IHttpLambdaResponse}
  */
 const cors = (event, rsp = {}, options = {}) => {
@@ -34,12 +34,3 @@ module.exports = cors;
 cors.headers = ['X-Forwarded-Referrer', 'Referrer', 'Referer', 'Host', "X-Forwarded-User-Agent", "User-Agent", "Accept-Language", "Cache-Control",
     'X-Viewer-Country', 'X-Forwarded-For', 'X-Span-Id', 'X-Correlation-Id', 'Content-Type', 'Content-Length', 'Authorization']
 cors.methods = ["GET", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-
-/**
- * @typedef CorsOptions
- * @property {string?} origin
- * @property {boolean?} allowCredentials
- * @property {string[]?} methods
- * @property {string[]?} headers
- * @property {number?} maxAge
- */

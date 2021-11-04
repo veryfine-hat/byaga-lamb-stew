@@ -4,7 +4,16 @@ export default function enhance(options: IEnhanceOptions, lambda: (event: IHttpL
 
 export interface IEnhanceOptions {
     logger: Journal,
-    onResponse: (rsp: IHttpLambdaResponse) => IHttpLambdaResponse
+    onResponse: (rsp: IHttpLambdaResponse) => IHttpLambdaResponse,
+    enableCors: boolean | ICorsOptions
+}
+
+export interface ICorsOptions {
+    origin?: string
+    allowCredentials?: boolean
+    methods?: string[],
+    headers?: string[],
+    maxAge?: number
 }
 
 export interface IHttpLambdaEvent {
