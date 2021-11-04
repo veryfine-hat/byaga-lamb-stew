@@ -1,5 +1,12 @@
-const identifyUser = ({headers, requestContext}) => {
+const identifyUser = ({headers, requestContext}, context) => {
     const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization)
+
+    if (userData && context?.annotate) {
+        context.annotate({ 'user.user_id': userData.sub })
+        userData.groups.forEach(group => {
+            context.annotate({ [`user.groups.${group}`]: true})
+        })
+    }
 
     return !userData ? {error: "No Auth Found"} : {data: userData}
 };
@@ -13,7 +20,7 @@ function userDataFromRequestContext(requestContext){
 function userDataFromClaims(claims){
     return {
         sub: claims.sub,
-        groups: claims.groups,
+        groups: Array.isArray(claims.groups) ? claims.groups : [claims.groups], //TODO: is this an array or delemeted?
         email: claims.email
     }
 }
