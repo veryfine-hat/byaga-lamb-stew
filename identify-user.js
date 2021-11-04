@@ -1,10 +1,10 @@
-const identifyUser = ({headers, requestContext}, context) => {
+const identifyUser = ({headers, requestContext}, logger) => {
     const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization)
 
-    if (userData && context?.annotate) {
-        context.annotate({ 'user.user_id': userData.sub })
+    if (userData && logger?.annotate) {
+        logger.annotate({ 'user.user_id': userData.sub })
         userData.groups.forEach(group => {
-            context.annotate({ [`user.groups.${group}`]: true})
+            logger.annotate({ [`user.groups.${group}`]: true})
         })
     }
 
@@ -20,7 +20,7 @@ function userDataFromRequestContext(requestContext){
 function userDataFromClaims(claims){
     return {
         sub: claims.sub,
-        groups: Array.isArray(claims.groups) ? claims.groups : [claims.groups], //TODO: is this an array or delemeted?
+        groups:  claims['cognito:groups'] || claims.groups || [],
         email: claims.email
     }
 }

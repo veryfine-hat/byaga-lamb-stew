@@ -1,6 +1,6 @@
-import {IHttpLambdaEvent} from "./enhance";
+import {IHttpLambdaEvent, ILogger} from "./enhance";
 
-function identifyUser(event: IHttpLambdaEvent): MethodResult
+export function identifyUser(event: IHttpLambdaEvent, logger: ILogger): MethodResult
 export function parseJwt(token: string): JwtAuthData
 
 export interface MethodResult {
