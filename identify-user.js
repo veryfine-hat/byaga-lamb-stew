@@ -18,9 +18,10 @@ function userDataFromRequestContext(requestContext){
 }
 
 function userDataFromClaims(claims){
+    const groups = claims['cognito:groups'] || claims.groups || []
     return {
         sub: claims.sub,
-        groups:  claims['cognito:groups'] || claims.groups || [],
+        groups:  Array.isArray(groups) ? groups : [groups],
         email: claims.email
     }
 }
