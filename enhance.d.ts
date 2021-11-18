@@ -1,6 +1,6 @@
 import Journal from "../journal/Journal";
 
-export default function enhance(options: IEnhanceOptions, lambda: (event: IHttpLambdaEvent, context: IEnhancedContext) => IHttpLambdaResponse): (event: IHttpLambdaEvent, context: ILambdaContext) => IHttpLambdaResponse
+export default function enhance(options: IEnhanceOptions, lambda: (event: IHttpLambdaEvent, context: IEnhancedContext) => IHttpLambdaResponse): (event: IHttpLambdaEvent, context: ILambdaContext) => Promise<IHttpLambdaResponse>
 
 export interface IEnhanceOptions {
     logger: Journal,

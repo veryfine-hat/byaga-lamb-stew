@@ -20,12 +20,11 @@ const enhance = ({
         'meta.region': process.env.AWS_REGION
     });
 
-    return async (event, context = {}) => {
-        const span = logger ? logger.beginSpan() : null;
+    return async (event, context) => {
+        const span = logger.beginSpan();
         const details = eventData(event, context);
 
         span.annotate({
-            'trace.span_id': details.spanId,
             'trace.parent_id': details.parentId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
@@ -60,6 +59,7 @@ const enhance = ({
                 'request.host': details.host,
                 'request.method': details.httpMethod,
                 'response.status': result ? result.statusCode : 500,
+                'response.content_length': result?.headers ? result?.headers['Content-Length'] : undefined,
                 'metrics.execution_time_remaining_ms': context.getRemainingTimeInMillis ? context.getRemainingTimeInMillis() : undefined, ...pathData
             });
         }
