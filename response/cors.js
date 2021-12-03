@@ -24,7 +24,7 @@ const cors = (event, rsp = {}, options = {}) => {
             "Access-Control-Allow-Methods": methods.join(", "),
             "Access-Control-Allow-Headers": allowHeaders.join(", "),
             "Access-Control-Max-Age": options.maxAge || 86400,
-            "Access-Control-Expose-Headers": exposeHeaders.length ? exposeHeaders.join(", ") : undefined,
+            "Access-Control-Expose-Headers": exposeHeaders.length ? exposeHeaders.join(", ") : cors.exposeHeaders,
             "Vary": allowAnyOrigin || allowedOrigins.length > 1 ? "Origin" : undefined
         }
     }
@@ -34,3 +34,4 @@ module.exports = cors;
 cors.headers = ['X-Forwarded-Referrer', 'Referrer', 'Referer', 'Host', "X-Forwarded-User-Agent", "User-Agent", "Accept-Language", "Cache-Control",
     'X-Viewer-Country', 'X-Forwarded-For', 'X-Span-Id', 'X-Correlation-Id', 'Content-Type', 'Content-Length', 'Authorization']
 cors.methods = ["GET", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+cors.exposeHeaders = ['Date']

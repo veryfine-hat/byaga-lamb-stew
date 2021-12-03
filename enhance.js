@@ -25,7 +25,7 @@ const enhance = ({
         const details = eventData(event, context);
 
         span.annotate({
-            'trace.parent_id': details.parentId,
+            'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
             'meta.function_version': context.functionVersion,
@@ -33,7 +33,8 @@ const enhance = ({
             'meta.function_arn': context.invokedFunctionArn,
             'meta.log_group': context.logGroupName,
             'meta.log_stream': context.logStreamName
-        });
+        }, {cascade: true});
+        span.annotate({ 'trace.parent_id': details.parentId });
         let result;
         try {
             result = await lambda(event, {
