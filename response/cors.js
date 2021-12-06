@@ -25,7 +25,7 @@ const cors = (event, rsp = {}, options = {}) => {
             "Access-Control-Allow-Methods": methods.join(", "),
             "Access-Control-Allow-Headers": allowHeaders.join(", "),
             "Access-Control-Max-Age": options.maxAge || 86400,
-            "Access-Control-Expose-Headers": exposeHeaders.length ? exposeHeaders.join(", ") : cors.exposeHeaders,
+            "Access-Control-Expose-Headers": Array.isArray(exposeHeaders) ? exposeHeaders.join(", ") : cors.exposeHeaders,
             "Access-Control-Allow-Credentials": options.allowCredentials || cors.allowCredentials,
             "Vary": allowAnyOrigin || allowedOrigins.length > 1 ? "Origin" : undefined
         }
