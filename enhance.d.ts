@@ -13,7 +13,7 @@ export interface ICorsOptions {
     allowCredentials?: boolean
     methods?: string[],
     headers?: string[],
-    maxAge?: number
+    maxAge?: number,
 }
 
 export interface IHttpLambdaEvent {

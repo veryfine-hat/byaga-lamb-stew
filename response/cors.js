@@ -11,9 +11,10 @@ const cors = (event, rsp = {}, options = {}) => {
     const allowHeaders = options.headers || cors.headers
     const exposeHeaders = options.headers || []
 
+    const headers = event && event.headers || {}
     const allowedOrigins = Array.isArray(origin) ? origin : [origin]
     const allowAnyOrigin = allowedOrigins.includes("*")
-    const referer = event?.headers["X-Forwarded-Referrer"] || event?.headers?.Referer || event?.headers?.Referrer
+    const referer = headers["X-Forwarded-Referrer"] || headers?.Referer || headers?.Referrer
     const refererDomain = referer?.substr(0, referer?.indexOf("/", 8))
 
     return {
@@ -25,6 +26,7 @@ const cors = (event, rsp = {}, options = {}) => {
             "Access-Control-Allow-Headers": allowHeaders.join(", "),
             "Access-Control-Max-Age": options.maxAge || 86400,
             "Access-Control-Expose-Headers": exposeHeaders.length ? exposeHeaders.join(", ") : cors.exposeHeaders,
+            "Access-Control-Allow-Credentials": options.allowCredentials || cors.allowCredentials,
             "Vary": allowAnyOrigin || allowedOrigins.length > 1 ? "Origin" : undefined
         }
     }
@@ -35,3 +37,4 @@ cors.headers = ['X-Forwarded-Referrer', 'Referrer', 'Referer', 'Host', "X-Forwar
     'X-Viewer-Country', 'X-Forwarded-For', 'X-Span-Id', 'X-Correlation-Id', 'Content-Type', 'Content-Length', 'Authorization']
 cors.methods = ["GET", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
 cors.exposeHeaders = ['Date']
+cors.allowCredentials = true
