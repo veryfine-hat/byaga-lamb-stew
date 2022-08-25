@@ -2,10 +2,7 @@ const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
 const cors = require("./response/cors");
 
-const enhance = ({
-                     logger, onResponse = rsp => rsp,
-    enableCors
-                 }, lambda) => {
+const enhance = ({ logger, onResponse = rsp => rsp, enableCors }, lambda) => {
     const buildResponse = (rsp, event) => {
         if (enableCors) {
             rsp = cors(event, rsp, enableCors === true ? undefined : enableCors)
@@ -34,7 +31,10 @@ const enhance = ({
             'meta.log_group': context.logGroupName,
             'meta.log_stream': context.logStreamName
         }, {cascade: true});
-        span.annotate({ 'trace.parent_id': details.parentId });
+        span.annotate({
+            'trace.span_id': details.spanId,
+            'trace.parent_id': details.parentId
+        });
         let result;
         try {
             result = await lambda(event, {

@@ -1,10 +1,10 @@
-const identifyUser = ({headers, requestContext}, logger) => {
+const identifyUser = ({headers, requestContext}, context) => {
     const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization)
 
-    if (userData && logger?.annotate) {
-        logger.annotate({ 'user.user_id': userData.sub })
+    if (userData && context?.logger?.annotate) {
+        context?.logger.annotate({ 'user.user_id': userData.sub })
         userData.groups.forEach(group => {
-            logger.annotate({ [`user.groups.${group}`]: true})
+            context?.logger.annotate({ [`user.groups.${group}`]: true})
         })
     }
 

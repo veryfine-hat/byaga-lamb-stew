@@ -3,7 +3,7 @@ const { v4: uuid } = require('uuid');
 
 jest.mock('uuid');
 
-const runTest = (event, context) => {
+const runTest = (event, context = {}) => {
     const log = jest.fn();
     const testMe = jest.fn();
     const childSpan = {
@@ -238,7 +238,7 @@ it('should attach the correlation id to future logs', async () => {
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
         'trace.correlation_id': 'corr-id-1234'
-    }));
+    }), { cascade: true});
 });
 
 it('should attach the request id to future logs', async () => {
@@ -254,7 +254,7 @@ it('should attach the request id to future logs', async () => {
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
         'trace.request_id': 'request-id-4321'
-    }));
+    }), { cascade: true});
 });
 
 it('should attach the function name to all logs', async () => {
@@ -265,7 +265,7 @@ it('should attach the function name to all logs', async () => {
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
         'meta.function_name': 'test-lambda'
-    }));
+    }), { cascade: true});
 });
 
 it('should attach the region to all logs', async () => {
@@ -288,7 +288,7 @@ it('should attach the function version to all logs', async () => {
 
     expect(logger.annotate).toHaveBeenCalledWith(expect.objectContaining({
         'meta.function_version': '99'
-    }));
+    }), { cascade: true});
 });
 
 
@@ -311,13 +311,15 @@ it('should return the lambda result back to the caller', async () => {
     return expect(exec()).resolves.toEqual('Some Result');
 });
 
-it('should allow exceptions to be thrown', async () => {
+it('should catch uncaught exceptions thrown in the lambda code', async () => {
     process.env.AWS_LAMBDA_FUNCTION_VERSION = '99';
     const event = {};
     const { lambda, exec } = runTest(event);
     lambda.mockRejectedValue(new Error('Bang'));
 
-    return expect(exec()).rejects.toEqual(new Error('Bang'));
+    return expect(exec()).resolves.toEqual(expect.objectContaining({
+        statusCode: 500
+    }));
 });
 
 it('should attach the request method to the end log', async () => {
@@ -390,7 +392,7 @@ it('should attach the response status code to the end log', async () => {
         }
     };
     const { log, exec, lambda } = runTest(event);
-    lambda.mockResolvedValue({ status: 299 });
+    lambda.mockResolvedValue({ statusCode: 299 });
     await exec();
 
 
