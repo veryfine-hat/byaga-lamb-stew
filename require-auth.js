@@ -1,7 +1,7 @@
 const { identifyUser } = require("./identify-user")
 const { forbidden } = require("./response")
 
-export const requireAuth = (fn) => {
+const requireAuth = (fn) => {
   return (event, context) => {
     const user = identifyUser(event, context);
     const userId = user?.data?.sub;
@@ -13,3 +13,5 @@ export const requireAuth = (fn) => {
     })
   }
 }
+
+module.exports = requireAuth
