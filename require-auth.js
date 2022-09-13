@@ -9,7 +9,7 @@ const requireAuth = (fn) => {
 
     return fn(event, {
       ...context,
-      user
+      user: user.data
     })
   }
 }
