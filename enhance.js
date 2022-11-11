@@ -2,7 +2,7 @@ const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
 const cors = require("./response/cors");
 
-const enhance = ({ logger, onResponse = rsp => rsp, enableCors }, lambda) => {
+const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
     const buildResponse = (rsp, event) => {
         if (enableCors) {
             rsp = cors(event, rsp, enableCors === true ? undefined : enableCors)
@@ -22,6 +22,7 @@ const enhance = ({ logger, onResponse = rsp => rsp, enableCors }, lambda) => {
         const details = eventData(event, context);
 
         span.annotate({
+            'service_name': name,
             'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
@@ -32,6 +33,7 @@ const enhance = ({ logger, onResponse = rsp => rsp, enableCors }, lambda) => {
             'meta.log_stream': context.logStreamName
         }, {cascade: true});
         span.annotate({
+            'name': 'lambda-handler',
             'trace.span_id': details.spanId,
             'trace.parent_id': details.parentId
         });
@@ -51,7 +53,6 @@ const enhance = ({ logger, onResponse = rsp => rsp, enableCors }, lambda) => {
                 return data;
             }, {});
             span.end({
-                message: 'Lambda Execution',
                 'request.user_agent': details.userAgent,
                 'request.referrer': details.referrer,
                 'request.device_type': details.deviceType,
