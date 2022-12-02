@@ -1,3 +1,4 @@
+const flattenHeaders = require('../lib/flatten-headers')
 /**
  * Adds cors headers to the response
  * @param {IHttpLambdaEvent} event
@@ -11,10 +12,10 @@ const cors = (event, rsp = {}, options = {}) => {
     const allowHeaders = options.headers || cors.headers
     const exposeHeaders = options.headers || []
 
-    const headers = event && event.headers || {}
+    const headers = flattenHeaders(event.headers)
     const allowedOrigins = Array.isArray(origin) ? origin : [origin]
     const allowAnyOrigin = allowedOrigins.includes("*")
-    const referer = headers["X-Forwarded-Referrer"] || headers?.Referer || headers?.Referrer
+    const referer = headers["x-forwarded-referrer"] || headers["referer"] || headers["referrer"]
     const refererDomain = referer?.substr(0, referer?.indexOf("/", 10))
 
     return {
