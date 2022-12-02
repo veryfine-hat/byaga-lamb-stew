@@ -15,7 +15,7 @@ const cors = (event, rsp = {}, options = {}) => {
     const allowedOrigins = Array.isArray(origin) ? origin : [origin]
     const allowAnyOrigin = allowedOrigins.includes("*")
     const referer = headers["X-Forwarded-Referrer"] || headers?.Referer || headers?.Referrer
-    const refererDomain = referer?.substr(0, dreferer?.indexOf("/", 10))
+    const refererDomain = referer?.substr(0, referer?.indexOf("/", 10))
 
     return {
         ...rsp,
