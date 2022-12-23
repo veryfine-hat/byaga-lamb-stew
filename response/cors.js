@@ -1,4 +1,5 @@
 const flattenHeaders = require('../lib/flatten-headers')
+const Context = require('../context')
 /**
  * Adds cors headers to the response
  * @param {IHttpLambdaEvent} event
@@ -6,7 +7,9 @@ const flattenHeaders = require('../lib/flatten-headers')
  * @param {ICorsOptions?} options - cors options
  * @returns {IHttpLambdaResponse}
  */
-const cors = (event, rsp = {}, options = {}) => {
+const cors = (rsp = {}, options = {}) => {
+    const event = Context.get('event')
+
     const origin = options.origin || ["*"]
     const methods = options.methods || cors.methods
     const allowHeaders = options.headers || cors.headers

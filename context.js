@@ -1,4 +1,4 @@
-const { AsyncLocalStorage } = require('node:async_hooks');
+const { AsyncLocalStorage } = require('async_hooks');
 const CONTEXT = 'context';
 const CASCADED_CONTEXT = 'cascaded-context'
 const LOGGER = 'logger'

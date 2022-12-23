@@ -1,6 +1,7 @@
 const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
 const cors = require("./response/cors");
+const Context = require('./context');
 
 const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
     const buildResponse = (rsp, event) => {
@@ -17,11 +18,12 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
         'meta.region': process.env.AWS_REGION
     });
 
-    return async (event, context) => {
-        const span = logger.beginSpan();
-        const details = eventData(event, context);
+    const handler = async (event, context, ...args) => {
+        Context.setContext('event', event, true)
+        Context.setContext('context', context, true)
+        const details = eventData();
 
-        span.annotate({
+        Context.annotate({
             'service_name': name,
             'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
@@ -32,27 +34,23 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
             'meta.log_group': context.logGroupName,
             'meta.log_stream': context.logStreamName
         }, {cascade: true});
-        span.annotate({
+        Context.annotate({
             'name': 'lambda-handler',
             'trace.span_id': details.spanId,
             'trace.parent_id': details.parentId
         });
         let result;
         try {
-            result = await lambda(event, {
-                ...context,
-                logger: span,
-                details
-            });
+            result = await lambda(event, context, ...args);
         } catch (err) {
-            span.exception(err);
+            Context.exception(err);
             return buildResponse(serverError(), event)
         } finally {
             const pathData = Object.entries(event.pathParameters || {}).reduce((data, [k, v]) => {
                 data[`request.params.${k}`] = v;
                 return data;
             }, {});
-            span.end({
+            Context.annotate({
                 'request.user_agent': details.userAgent,
                 'request.referrer': details.referrer,
                 'request.device_type': details.deviceType,
@@ -68,6 +66,7 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
 
         return buildResponse(result, event);
     };
+    return  Context.withChildSpan(handler)
 };
 
-module.exports = enhance;
+module.exports = enhance

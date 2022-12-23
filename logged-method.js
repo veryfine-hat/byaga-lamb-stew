@@ -1,11 +1,11 @@
+const Context = require('./context')
 const loggedMethod = (name, fn) => {
   return async (...args) => {
-    const logger = args[args.length - 1]
-    const done = logger.startTimer(name)
+    const done = Context.startTimer(name)
     try {
       return await fn(...args);
     } catch (error) {
-      logger.exception(error);
+      Context.exception(error);
       return { error };
     } finally {
       done()
