@@ -10,7 +10,7 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
         }
         return onResponse(rsp)
     }
-
+    Context.configure({logger})
     logger.configure({
         write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
     });
