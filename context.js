@@ -35,7 +35,7 @@ const setContext = (name, value, shared = false) => {
   else { getContext().set(name, value)}
 }
 const bulkSetContext = (data, shared = false) =>
-    Object.entries(data).forEach(([name, value]) => set(name, value, shared));
+    Object.entries(data).forEach(([name, value]) => setContext(name, value, shared));
 
 module.exports.createSpan = createSpan
 module.exports.withChildSpan = fn => (...args) => createSpan(() => fn(...args))
