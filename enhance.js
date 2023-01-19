@@ -19,8 +19,8 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
     });
 
     const handler = async (event, context, ...args) => {
-        Context.setContext('event', event, true)
-        Context.setContext('context', context, true)
+        Context.set('event', event, true)
+        Context.set('context', context, true)
         const details = eventData();
 
         Context.annotate({

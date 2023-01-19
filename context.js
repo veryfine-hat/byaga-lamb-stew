@@ -47,6 +47,6 @@ module.exports.startTimer = () => {
   return () => annotate({ 'duration_ms': Date.now() - startAt });
 }
 module.exports.exception = exception
-module.exports.getContext = (name) => getContext().get(name) || getSharedContext().get(name)
-module.exports.setContext = setContext
-module.exports.bulkSetContext = bulkSetContext
+module.exports.get = (name) => getContext().get(name) || getSharedContext().get(name)
+module.exports.set = setContext
+module.exports.bulkSet = bulkSetContext

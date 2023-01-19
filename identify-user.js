@@ -3,11 +3,11 @@ const identifyUser = () => {
   const {
     headers,
     requestContext
-  } = Context.getContext('event');
+  } = Context.get('event');
   const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization);
 
   if (userData) {
-    Context.setContext('user', userData);
+    Context.set('user', userData);
     Context.annotate({ 'user.user_id': userData.sub });
     userData.groups.forEach(group => {
       Context.annotate({ [`user.groups.${group}`]: true });
