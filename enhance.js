@@ -6,7 +6,7 @@ const Context = require('./context');
 const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
     const buildResponse = (rsp, event) => {
         if (enableCors) {
-            rsp = cors(event, rsp, enableCors === true ? undefined : enableCors)
+            rsp = cors(rsp, enableCors === true ? undefined : enableCors)
         }
         return onResponse(rsp)
     }
@@ -66,7 +66,7 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
 
         return buildResponse(result, event);
     };
-    return  Context.withChildSpan(handler)
+    return Context.withChildSpan(handler)
 };
 
 module.exports = enhance

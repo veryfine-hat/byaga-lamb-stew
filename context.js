@@ -27,15 +27,16 @@ const createSpan = async (fn) => {
   childConfig.set(LOGGER, logger);
   childConfig.set(CONTEXT, new Map())
   childConfig.set(CASCADED_CONTEXT, new Map(config.get(CASCADED_CONTEXT)))
-  await asyncLocalStorage.run(childConfig, fn)
+  const result = await asyncLocalStorage.run(childConfig, fn)
   logger.end()
+  return result;
 }
 const setContext = (name, value, shared = false) => {
   if (shared) { getSharedContext().set(name, value)}
   else { getContext().set(name, value)}
 }
 const bulkSetContext = (data, shared = false) =>
-    Object.entries(data).forEach(([name, value]) => setContext(name, value, shared));
+  Object.entries(data).forEach(([name, value]) => setContext(name, value, shared));
 
 module.exports.createSpan = createSpan
 module.exports.withChildSpan = fn => (...args) => createSpan(() => fn(...args))
