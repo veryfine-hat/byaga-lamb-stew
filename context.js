@@ -47,7 +47,7 @@ module.exports.withChildSpan = fn => (...args) => createSpan(() => fn(...args))
 module.exports.configure = configure
 module.exports.log = (...args) => getLogger().log(...args)
 module.exports.annotate = annotate
-module.exports.startTimer = (name => {
+module.exports.startTimer = name => {
   const startAt = Date.now();
   return () => {
     const key = name ? `${name}_dur_ms` : 'duration_ms'
