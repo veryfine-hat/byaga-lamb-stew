@@ -40,15 +40,19 @@ const bulkSetContext = (data, shared = false) =>
   Object.entries(data).forEach(([name, value]) => setContext(name, value, shared));
 
 const get = (name) => getContext().get(name) || getSharedContext().get(name)
+const sum = (name, add) => setContext(name, (get(name) || 0) + add)
 
 module.exports.createSpan = createSpan
 module.exports.withChildSpan = fn => (...args) => createSpan(() => fn(...args))
 module.exports.configure = configure
 module.exports.log = (...args) => getLogger().log(...args)
 module.exports.annotate = annotate
-module.exports.startTimer = () => {
+module.exports.startTimer = (name => {
   const startAt = Date.now();
-  return () => annotate({ 'duration_ms': Date.now() - startAt });
+  return () => {
+    const key = name ? `${name}_dur_ms` : 'duration_ms'
+    annotate({ [key]: Date.now() - startAt });
+  }
 }
 module.exports.exception = exception
 module.exports.get = get;
@@ -56,7 +60,14 @@ module.exports.set = setContext
 module.exports.bulkSet = bulkSetContext
 module.exports.metrics = {
   total: (name, add=1) => {
-    const total = setContext(name, (get(name) || 0) + add)
-    annotate({[`app.metrics.${name}`]  :    total  })
+    const total = sum(name, add)
+    annotate({[`app.metrics.${name}`]  :  total  })
+  },
+  startTimer: (name) => {
+    const startAt = Date.now();
+    return () => {
+      const duration = sum(name, Date.now() - startAt)
+      annotate({[`${name}_total_dur_ms`]: duration });
+    }
   }
 }
