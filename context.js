@@ -34,9 +34,12 @@ const createSpan = async (fn) => {
 const setContext = (name, value, shared = false) => {
   if (shared) { getSharedContext().set(name, value)}
   else { getContext().set(name, value)}
+  return value
 }
 const bulkSetContext = (data, shared = false) =>
   Object.entries(data).forEach(([name, value]) => setContext(name, value, shared));
+
+const get = (name) => getContext().get(name) || getSharedContext().get(name)
 
 module.exports.createSpan = createSpan
 module.exports.withChildSpan = fn => (...args) => createSpan(() => fn(...args))
@@ -48,6 +51,12 @@ module.exports.startTimer = () => {
   return () => annotate({ 'duration_ms': Date.now() - startAt });
 }
 module.exports.exception = exception
-module.exports.get = (name) => getContext().get(name) || getSharedContext().get(name)
+module.exports.get = get;
 module.exports.set = setContext
 module.exports.bulkSet = bulkSetContext
+module.exports.metrics = {
+  total: (name, add=1) => {
+    const total = setContext(name, (get(name) || 0) + add)
+    annotate({[`app.metrics.${name}`]  :    total  })
+  }
+}
