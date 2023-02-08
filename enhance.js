@@ -1,15 +1,8 @@
 const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
-const cors = require("./response/cors");
 const Context = require('./context');
 
-const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
-    const buildResponse = (rsp, event) => {
-        if (enableCors) {
-            rsp = cors(rsp, enableCors === true ? undefined : enableCors)
-        }
-        return onResponse(rsp)
-    }
+const enhance = ({ service, name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
     Context.configure({logger})
     logger.configure({
         write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
@@ -24,7 +17,8 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
         const details = eventData();
 
         Context.annotate({
-            'service_name': name,
+            'service_name': service,
+            'name': name || 'lambda-handler',
             'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
@@ -44,7 +38,7 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
             result = await lambda(event, context, ...args);
         } catch (err) {
             Context.exception(err);
-            return buildResponse(serverError(), event)
+            return onResponse(serverError(), event)
         } finally {
             const pathData = Object.entries(event.pathParameters || {}).reduce((data, [k, v]) => {
                 data[`request.params.${k}`] = v;
@@ -60,11 +54,12 @@ const enhance = ({ name, logger, onResponse = rsp => rsp, enableCors }, lambda) 
                 'request.method': details.httpMethod,
                 'response.status': result ? result.statusCode : 500,
                 'response.content_length': result?.headers ? result?.headers['Content-Length'] : undefined,
-                'metrics.execution_time_remaining_ms': context.getRemainingTimeInMillis ? context.getRemainingTimeInMillis() : undefined, ...pathData
+                'metrics.execution_time_remaining_ms': context.getRemainingTimeInMillis ? context.getRemainingTimeInMillis() : undefined,
+                ...pathData
             });
         }
 
-        return buildResponse(result, event);
+        return onResponse(result);
     };
     return Context.withChildSpan(handler)
 };

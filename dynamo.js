@@ -1,4 +1,4 @@
-const { DocumentClient } = require("aws-sdk/clients/dynamodb");
+const { DocumentClient } = require("@aws-sdk/client-dynamodb");
 const Context = require('./context')
 
 const dynamoDB = new DocumentClient();
