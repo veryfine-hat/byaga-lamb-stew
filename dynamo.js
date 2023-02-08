@@ -1,7 +1,7 @@
-const { DocumentClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDB } = require("@aws-sdk/client-dynamodb");
 const Context = require('./context')
 
-const dynamoDB = new DocumentClient();
+const dynamoDB = new DynamoDB();
 
 const dynamo = async (method, params) => {
   Context.annotate({

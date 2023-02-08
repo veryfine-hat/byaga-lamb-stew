@@ -1,6 +1,6 @@
 {
   "name": "@byaga/lamb-stew",
-  "version": "1.0.1-0",
+  "version": "1.0.0-9",
   "description": "Lambda Helper methods",
   "main": "./enhance.js",
   "scripts": {
@@ -13,6 +13,8 @@
   "author": "VeryFineHat",
   "license": "MIT",
   "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.266.1",
+    "@aws-sdk/client-lambda": "^3.266.1",
     "jest": "^26.6.3",
     "jest-junit": "^12.0.0"
   },
