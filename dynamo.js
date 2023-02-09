@@ -11,7 +11,7 @@ const dynamo = async (method, params) => {
   })
   const done = Context.startTimer('call_database');
   try {
-    return { result: await dynamoDB[method](params).promise() };
+    return { result: await dynamoDB[method](params) };
   } catch(error){
     Context.exception(error);
     return {error}
