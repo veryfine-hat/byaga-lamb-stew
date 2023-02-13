@@ -1,22 +1,21 @@
 const eventData = require("./lib/event-data");
 const {serverError} = require("./response");
-const Context = require('./context');
+const Journal = require('@byaga/journal');
 
-const enhance = ({ service, name, logger, onResponse = rsp => rsp, enableCors }, lambda) => {
-    Context.configure({logger})
-    logger.configure({
-        write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
-    });
-    logger.annotate({
-        'meta.region': process.env.AWS_REGION
-    });
+Journal.configure({
+    write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
+});
+Journal.annotate({
+    'meta.region': process.env.AWS_REGION
+});
 
+const enhance = ({ service, name, onResponse = rsp => rsp }, lambda) => {
     const handler = async (event, context, ...args) => {
-        Context.set('event', event, true)
-        Context.set('context', context, true)
+        Journal.set('event', event, true)
+        Journal.set('context', context, true)
         const details = eventData();
 
-        Context.annotate({
+        Journal.annotate({
             'service_name': service,
             'name': name || 'lambda-handler',
             'trace.trace_id': details.traceId,
@@ -28,7 +27,7 @@ const enhance = ({ service, name, logger, onResponse = rsp => rsp, enableCors },
             'meta.log_group': context.logGroupName,
             'meta.log_stream': context.logStreamName
         }, {cascade: true});
-        Context.annotate({
+        Journal.annotate({
             'name': 'lambda-handler',
             'trace.span_id': details.spanId,
             'trace.parent_id': details.parentId
@@ -37,14 +36,14 @@ const enhance = ({ service, name, logger, onResponse = rsp => rsp, enableCors },
         try {
             result = await lambda(event, context, ...args);
         } catch (err) {
-            Context.exception(err);
+            Journal.exception(err);
             return onResponse(serverError(), event)
         } finally {
             const pathData = Object.entries(event.pathParameters || {}).reduce((data, [k, v]) => {
                 data[`request.params.${k}`] = v;
                 return data;
             }, {});
-            Context.annotate({
+            Journal.annotate({
                 'request.user_agent': details.userAgent,
                 'request.referrer': details.referrer,
                 'request.device_type': details.deviceType,
@@ -61,7 +60,7 @@ const enhance = ({ service, name, logger, onResponse = rsp => rsp, enableCors },
 
         return onResponse(result);
     };
-    return Context.withChildSpan(handler)
+    return Journal.withChildSpan(handler)
 };
 
 module.exports = enhance
