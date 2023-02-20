@@ -1,16 +1,16 @@
-const Context = require('./context');
+const Journal = require('@byaga/journal');
 const identifyUser = () => {
   const {
     headers,
     requestContext
-  } = Context.get('event');
+  } = Journal.get('event');
   const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization);
 
   if (userData) {
-    Context.set('user', userData);
-    Context.annotate({ 'user.user_id': userData.sub });
+    Journal.set('user', userData);
+    Journal.annotate({ 'user.user_id': userData.sub });
     userData.groups.forEach(group => {
-      Context.annotate({ [`user.groups.${group}`]: true });
+      Journal.annotate({ [`user.groups.${group}`]: true });
     });
   }
 

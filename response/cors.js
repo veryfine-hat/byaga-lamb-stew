@@ -1,5 +1,5 @@
 const flattenHeaders = require('../lib/flatten-headers')
-const Context = require('../context')
+const Journal = require('@byaga/journal')
 /**
  * Adds cors headers to the response
  * @param {IHttpLambdaEvent} event
@@ -8,7 +8,7 @@ const Context = require('../context')
  * @returns {IHttpLambdaResponse}
  */
 const cors = (rsp = {}, options = {}) => {
-    const event = Context.get('event')
+    const event = Journal.get('event')
 
     const origin = options.origin || ["*"]
     const methods = options.methods || cors.methods
