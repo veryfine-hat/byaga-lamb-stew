@@ -5,9 +5,6 @@ const Journal = require('@byaga/journal');
 Journal.configure({
     write: data => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
 });
-Journal.annotate({
-    'meta.region': process.env.AWS_REGION
-});
 
 const enhance = ({ service, name, onResponse = rsp => rsp }, lambda) => {
     const handler = async (event, context, ...args) => {
@@ -21,6 +18,7 @@ const enhance = ({ service, name, onResponse = rsp => rsp }, lambda) => {
             'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
+            'meta.region': process.env.AWS_REGION,
             'meta.function_version': context.functionVersion,
             'meta.function_name': context.functionName,
             'meta.function_arn': context.invokedFunctionArn,
