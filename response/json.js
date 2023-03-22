@@ -13,6 +13,7 @@ const json = (data, rsp = {}) => {
             'Content-Type': 'application/json',
             'Content-Length': stringData.length
         },
+        data,
         body: stringData
     }
 };
