@@ -14,7 +14,6 @@ const enhance = ({ service, name, onResponse = rsp => rsp }, lambda) => {
 
         Journal.annotate({
             'service_name': service,
-            'name': name || 'lambda-handler',
             'trace.trace_id': details.traceId,
             'trace.correlation_id': details.correlationId,
             'trace.request_id': details.requestId,
@@ -58,7 +57,7 @@ const enhance = ({ service, name, onResponse = rsp => rsp }, lambda) => {
 
         return onResponse(result);
     };
-    return Journal.withChildSpan(handler)
+    return Journal.withChildSpan(handler, name || 'lambda-handler')
 };
 
 module.exports = enhance

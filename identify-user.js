@@ -7,10 +7,10 @@ const identifyUser = () => {
   const userData = userDataFromRequestContext(requestContext) || userDataFromAuthToken(headers?.Authorization);
 
   if (userData) {
-    Journal.set('user', userData);
-    Journal.annotate({ 'user.user_id': userData.sub });
+    Journal.set('user', userData, true);
+    Journal.annotate('user.user_id', userData.sub);
     userData.groups.forEach(group => {
-      Journal.annotate({ [`user.groups.${group}`]: true });
+      Journal.annotate(`user.groups.${group}`, true );
     });
   }
 
