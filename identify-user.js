@@ -25,6 +25,7 @@ function userDataFromRequestContext(requestContext) {
 
 function userDataFromClaims(claims) {
   const groups = claims['cognito:groups'] || claims.groups || [];
+  Journal.set('user-context-data', { authorizer: { claims }})
   return {
     sub: claims.sub,
     groups: Array.isArray(groups) ? groups : [groups],
@@ -34,6 +35,7 @@ function userDataFromClaims(claims) {
 
 function userDataFromIdentity(identity) {
   if (!identity.user) return undefined;
+  Journal.set('user-context-data', { authorizer: { identity }})
   return {
     sub: identity.user,
     groups: [],

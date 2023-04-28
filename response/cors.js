@@ -1,5 +1,6 @@
 const flattenHeaders = require('../lib/flatten-headers')
 const Journal = require('@byaga/journal')
+const deepMerge = require('../lib/deep-merge')
 /**
  * Adds cors headers to the response
  * @param {IHttpLambdaEvent} event
@@ -21,10 +22,8 @@ const cors = (rsp = {}, options = {}) => {
     const referer = headers["x-forwarded-referrer"] || headers["referer"] || headers["referrer"]
     const refererDomain = referer?.substr(0, referer?.indexOf("/", 10))
 
-    return {
-        ...rsp,
+    return deepMerge(rsp, {
         headers: {
-            ...rsp?.headers,
             "Access-Control-Allow-Origin": (allowAnyOrigin || origin.includes(refererDomain)) ? refererDomain : origin[0],
             "Access-Control-Allow-Methods": methods.join(", "),
             "Access-Control-Allow-Headers": allowHeaders.join(", "),
@@ -33,7 +32,7 @@ const cors = (rsp = {}, options = {}) => {
             "Access-Control-Allow-Credentials": options.allowCredentials || cors.allowCredentials,
             "Vary": allowAnyOrigin || allowedOrigins.length > 1 ? "Origin" : undefined
         }
-    }
+    })
 };
 
 module.exports = cors;

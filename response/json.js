@@ -1,3 +1,4 @@
+const deepMerge = require('../lib/deep-merge')
 /**
  * Updates the response to include the json data with appropriate headers
  * @param {*} data - some JSON data
@@ -6,16 +7,15 @@
  */
 const json = (data, rsp = {}) => {
     const stringData = JSON.stringify(data);
-    return {
-        ...rsp,
+    rsp = deepMerge(rsp, {
         headers: {
-            ...rsp.headers,
             'Content-Type': 'application/json',
-            'Content-Length': stringData.length
+            'Content-Length': stringData?.length
         },
-        data,
         body: stringData
-    }
+    })
+    rsp.data = data // data should be overwritten and not merged
+    return rsp
 };
 
 module.exports = json;
