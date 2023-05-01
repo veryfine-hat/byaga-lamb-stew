@@ -18,14 +18,21 @@ const identifyUser = () => {
 };
 
 function userDataFromRequestContext(requestContext) {
-  if (requestContext?.authorizer?.claims) return userDataFromClaims(requestContext.authorizer?.claims);
-  if (requestContext?.identity) return userDataFromIdentity(requestContext.identity);
+  if (requestContext?.authorizer?.claims)
+    return userDataFromClaims(requestContext.authorizer.claims, {
+      requestContext: {authorizer: { claims: requestContext.authorizer.claims}}
+    });
+  if (requestContext?.identity)
+    return userDataFromIdentity(requestContext.identity, {
+      requestContext: { identity: requestContext.identity}
+    });
   return undefined;
 }
 
-function userDataFromClaims(claims) {
+function userDataFromClaims(claims, eventData) {
   const groups = claims['cognito:groups'] || claims.groups || [];
-  Journal.set('user-context-data', { authorizer: { claims }})
+  Journal.set('event-user-data', eventData)
+
   return {
     sub: claims.sub,
     groups: Array.isArray(groups) ? groups : [groups],
@@ -33,9 +40,10 @@ function userDataFromClaims(claims) {
   };
 }
 
-function userDataFromIdentity(identity) {
+function userDataFromIdentity(identity, eventData) {
   if (!identity.user) return undefined;
-  Journal.set('user-context-data', { authorizer: { identity }})
+
+  Journal.set('event-user-data', eventData)
   return {
     sub: identity.user,
     groups: [],
@@ -49,7 +57,11 @@ function userDataFromAuthToken(authHeader) {
   const token = authHeader.substr(8 /*"Bearer ".length*/);
 
   if (!token) return undefined;
-  return userDataFromClaims(parseJwt(token));
+  const claims = parseJwt(token)
+  return userDataFromClaims(parseJwt(token), {
+    requestContext: { authorizer: { claims } },
+    headers: {Authorization: authHeader}
+  });
 }
 
 function parseJwt(token) {
