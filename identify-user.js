@@ -31,7 +31,7 @@ function userDataFromRequestContext(requestContext) {
 
 function userDataFromClaims(claims, eventData) {
   const groups = claims['cognito:groups'] || claims.groups || [];
-  Journal.set('event-user-data', eventData)
+  Journal.set('event-user-data', eventData, true)
 
   return {
     sub: claims.sub,
@@ -43,7 +43,7 @@ function userDataFromClaims(claims, eventData) {
 function userDataFromIdentity(identity, eventData) {
   if (!identity.user) return undefined;
 
-  Journal.set('event-user-data', eventData)
+  Journal.set('event-user-data', eventData, true)
   return {
     sub: identity.user,
     groups: [],
