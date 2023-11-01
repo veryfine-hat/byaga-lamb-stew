@@ -14,7 +14,6 @@ const json = (data, rsp = {}) => {
         },
         body: stringData
     })
-    rsp.data = data // data should be overwritten and not merged
     return rsp
 };
 
