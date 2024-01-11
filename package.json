@@ -9,7 +9,8 @@
     "build": "npm run clean && tsc",
     "lint": "eslint . --ext .ts",
     "test": "jest",
-    "prepublishOnly": "npm run lint && npm test && npm run build"
+    "preversion": "npm run lint && npm test && npm run build",
+    "prepublishOnly": "npm run preversion"
   },
   "keywords": [
     "lambda",
