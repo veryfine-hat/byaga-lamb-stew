@@ -34,7 +34,7 @@ export const invokeLambda = async (functionName: string, params: APIGatewayProxy
         if (result.StatusCode && result.StatusCode >= 300) {
             Journal.annotate({
                 error: "Lambda Execution Failed",
-                'error.detail': result
+                'error.detail': result.FunctionError,
             });
             return {error: result};
         }

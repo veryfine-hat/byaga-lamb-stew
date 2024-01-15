@@ -17,7 +17,7 @@ export function userDataFromIdentity(identity: APIGatewayEventIdentity, eventDat
     if (!identity.user) return null;
 
     // Store the event data in the Journal
-    Journal.set('event-user-data', eventData, true)
+    Journal.setContextValue('event-user-data', eventData, true)
 
     // Return the user data
     return {

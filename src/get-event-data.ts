@@ -4,6 +4,10 @@ import Journal from "@byaga/journal";
 import {getClientIp} from "./request-ip";
 import {EventData} from "./types/EventData";
 import {isTrue} from "./is-true";
+import { APIGatewayEventDefaultAuthorizerContext
+} from "aws-lambda";
+import {APIGatewayEventIdentity, APIGatewayEventRequestContextWithAuthorizer} from "aws-lambda/common/api-gateway";
+import {getLambdaContext, getLambdaEvent} from "./enhance/event-details";
 
 /**
  * Retrieves event data from the current request context.
@@ -20,13 +24,13 @@ import {isTrue} from "./is-true";
  * console.log(data);
  */
 export const getEventData = (): EventData => {
-    const event = Journal.get('event');
-    const context = Journal.get('context');
+    const event = getLambdaEvent();
+    const context = getLambdaContext();
 
-    const {requestContext = {}} = event;
-    const {identity = {}} = requestContext;
+    const {requestContext = {} as APIGatewayEventRequestContextWithAuthorizer<APIGatewayEventDefaultAuthorizerContext>} = event;
+    const {identity = {} as APIGatewayEventIdentity} = requestContext ;
     const headers = flattenHeaders(event.headers);
-    Journal.set('headers', headers, true);
+    Journal.setContextValue('headers', headers, true);
 
     const details: EventData = {
         path: event.path,
@@ -57,7 +61,7 @@ export const getEventData = (): EventData => {
         correlationId: headers['x-correlation-id'] || context.awsRequestId || requestContext.requestId,
         requestTime: requestContext.requestTimeEpoch ? new Date(requestContext.requestTimeEpoch).toISOString() : undefined
     };
-    Journal.bulkSet(details, true);
+    Journal.setContextValues(details, true);
     return details;
 };
 

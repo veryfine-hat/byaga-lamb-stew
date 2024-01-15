@@ -1,7 +1,7 @@
-import enhance from "./enhance";
+import {enhance} from "./enhance";
 import {v4} from 'uuid';
 import Journal from "@byaga/journal";
-import {Context} from 'aws-lambda';
+import {APIGatewayProxyEvent, Context} from 'aws-lambda';
 import {StructuredLog} from "@byaga/journal/lib/StructuredLog";
 
 jest.mock('uuid');
@@ -24,32 +24,29 @@ const context: Context = {
     fail(): void { return; },
     succeed(): void { return; },
 }
-
-const runTest = (event: object, context: Context = {} as Context) => {
-    const logSpy = jest.spyOn(Journal, 'log');
+const runTest = (event: Record<string, unknown>, context: Context = {} as Context) => {
     const annotateSpy = jest.spyOn(Journal, 'annotate');
     const exceptionSpy = jest.spyOn(Journal, 'exception');
-    const withChildSpan = jest.spyOn(Journal, 'withChildSpan')
-        .mockImplementation(fn => async (...args) => fn(...args))
-    const testMe = jest.fn();
-    Journal.configure({
-        write: (data: StructuredLog) => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n')
-    });
+    const withChildSpan = jest.spyOn(Journal, 'withChildSpan');
+    const testMe = jest.fn().mockResolvedValue({ 'a': 'result' })
+    const write = jest.fn((data: StructuredLog) => process.stdout.write(JSON.stringify(data).replace(/\r/g, '\\r').replace(/\n/g, '\\n') + '\r\n'))
+    Journal.configure({ write });
     const lambda = enhance({
         service: 'lamb-stew',
         name: 'enhance-test'
     })(testMe);
 
     return {
-        log: logSpy,
-
         logger: {
             annotate: annotateSpy,
             exception: exceptionSpy,
-            withChildSpan
+            withChildSpan,
+            write
         },
         lambda: testMe,
-        exec: () => lambda(event, context)
+        exec: () => {
+            return lambda(event as unknown as APIGatewayProxyEvent, context)
+        }
     };
 };
 
@@ -61,10 +58,10 @@ it('should log an end event after the lambda is executed', async () => {
     } = runTest(event);
     await exec();
 
-    expect(logger.withChildSpan).toHaveBeenCalledWith(
-        expect.any(Function),
-        'enhance-test'
-    );
+    expect(logger.write).toHaveBeenCalledWith(expect.objectContaining({
+        service_name: 'lamb-stew',
+        name: 'enhance-test'
+    }));
 });
 
 it('should attach trace headers to future logs', async () => {

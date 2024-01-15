@@ -1,4 +1,4 @@
-export interface EventData {
+export interface EventData extends Record<string, unknown> {
     path?: string;
     httpMethod?: string;
     referrer?: string;

@@ -1,6 +1,6 @@
 import {deepMerge} from './deep-merge';
-import Journal from "@byaga/journal";
 import {APIGatewayProxyEvent} from "aws-lambda";
+import {getUserData} from "./identify-user/user-data";
 
 /**
  * Applies the user data to the request object
@@ -8,6 +8,6 @@ import {APIGatewayProxyEvent} from "aws-lambda";
 export const applyUser = (
     request: APIGatewayProxyEvent = {} as unknown as APIGatewayProxyEvent
 ): APIGatewayProxyEvent =>
-    deepMerge(request, Journal.get('event-user-data'));
+    deepMerge(request, getUserData() as unknown as Record<string, unknown>);
 
 export default applyUser;

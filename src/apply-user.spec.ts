@@ -6,7 +6,7 @@ jest.mock("@byaga/journal");
 let getSpy: jest.SpyInstance;
 beforeEach(() => {
     jest.clearAllMocks();
-    getSpy = jest.spyOn(Journal, 'get');
+    getSpy = jest.spyOn(Journal, 'getContextValue');
 });
 
 it('merges user data into the request object', () => {

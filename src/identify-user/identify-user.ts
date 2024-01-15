@@ -12,7 +12,7 @@ import {userDataFromAuthToken} from "./user-data-from-auth-token";
  */
 export const identifyUser = () => {
     // Get the headers and request context from the event stored in the Journal
-    const event = Journal.get('event') || {} as APIGatewayProxyEvent;
+    const event = (Journal.getContextValue('event') || {}) as APIGatewayProxyEvent;
     const { headers, requestContext } = event;
 
     // Try to get the user data from the request context, if not available try to get it from the authorization token
@@ -21,7 +21,7 @@ export const identifyUser = () => {
     // If user data is available
     if (userData) {
         // Store the user data in the Journal
-        Journal.set('user', userData, true);
+        Journal.setContextValue('user', userData, true);
         // Add an annotation for the user id
         Journal.annotate('user.user_id', userData.sub);
         // For each group the user belongs to, add an annotation

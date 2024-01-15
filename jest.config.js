@@ -1,6 +1,7 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testPathIgnorePatterns: ['/node_modules/', '/lib/', '/archive'],
   reporters: [
     "default",
     [
@@ -15,8 +16,12 @@ module.exports = {
       {
         publicPath: './test-results/html',
         filename: 'index.html',
-        expand: true
+        expand: true,
+        includeFailureMsg: true
       }
     ]
-  ]
+  ],
+  collectCoverage: true,
+  coverageDirectory: './test-results/coverage',
+  coverageReporters: ['text', 'lcov', 'html']
 };

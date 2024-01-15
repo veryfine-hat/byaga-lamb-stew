@@ -18,7 +18,7 @@ export const cors = (
     rsp: APIGatewayProxyResult = {} as unknown as APIGatewayProxyResult,
     options: CorsOptions = {}
 ): APIGatewayProxyResult => {
-    const event: APIGatewayProxyEvent = Journal.get('event');
+    const event: APIGatewayProxyEvent = Journal.getContextValue('event') as APIGatewayProxyEvent;
 
     const origin: string | string[] = options.origin || "*";
     const methods: string[] = options.methods || corsMethods;

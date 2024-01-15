@@ -9,14 +9,14 @@ export const applyTrace = (
     httpEvent: APIGatewayProxyEvent = {} as unknown as APIGatewayProxyEvent
 ): APIGatewayProxyEvent => deepMerge(httpEvent, {
     headers: {
-        'X-Forwarded-Referrer': Journal.get('referrer'),
-        'X-Forwarded-User-Agent': Journal.get('userAgent'),
-        'Accept-Language': Journal.get('language'),
-        'X-Viewer-Country': Journal.get('country'),
-        'X-Forwarded-For': Journal.get('forwardedIp'),
-        'X-Trace-Id': Journal.get('traceId'),
-        'X-Span-Id': Journal.get('spanId'),
-        'X-Correlation-Id': Journal.get('correlationId')
+        'X-Forwarded-Referrer': Journal.getContextValue('referrer'),
+        'X-Forwarded-User-Agent': Journal.getContextValue('userAgent'),
+        'Accept-Language': Journal.getContextValue('language'),
+        'X-Viewer-Country': Journal.getContextValue('country'),
+        'X-Forwarded-For': Journal.getContextValue('forwardedIp'),
+        'X-Trace-Id': Journal.getContextValue('traceId'),
+        'X-Span-Id': Journal.getContextValue('spanId'),
+        'X-Correlation-Id': Journal.getContextValue('correlationId')
     }
 });
 

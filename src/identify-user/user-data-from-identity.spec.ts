@@ -8,7 +8,7 @@ let setMock: jest.SpyInstance
 beforeEach(() => {
     jest.clearAllMocks();
 
-    setMock = jest.spyOn(Journal, 'set');
+    setMock = jest.spyOn(Journal, 'setContextValue');
 });
 
 it('returns user data when user property is present in identity', () => {

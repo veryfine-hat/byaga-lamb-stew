@@ -9,7 +9,7 @@ jest.mock('./user-data-from-auth-token');
 let getSpy: jest.SpyInstance;
 beforeEach(() => {
     jest.clearAllMocks();
-    getSpy = jest.spyOn(Journal, 'get');
+    getSpy = jest.spyOn(Journal, 'getContextValue');
     getSpy.mockReturnValue({
         headers: { req: 'headers'},
         requestContext: { 'req': 'context' }
@@ -24,7 +24,7 @@ it('returns user data when user is identified from request context', () => {
     const result = identifyUser();
 
     expect(result).toEqual({data: mockUserData});
-    expect(Journal.set).toHaveBeenCalledWith('user', mockUserData, true);
+    expect(Journal.setContextValue).toHaveBeenCalledWith('user', mockUserData, true);
     expect(Journal.annotate).toHaveBeenCalledWith('user.user_id', mockUserData.sub);
     mockUserData.groups.forEach(group => {
         expect(Journal.annotate).toHaveBeenCalledWith(`user.groups.${group}`, true);
@@ -39,7 +39,7 @@ it('returns user data when user is identified from authorization token', () => {
     const result = identifyUser();
 
     expect(result).toEqual({data: mockUserData});
-    expect(Journal.set).toHaveBeenCalledWith('user', mockUserData, true);
+    expect(Journal.setContextValue).toHaveBeenCalledWith('user', mockUserData, true);
     expect(Journal.annotate).toHaveBeenCalledWith('user.user_id', mockUserData.sub);
     mockUserData.groups.forEach(group => {
         expect(Journal.annotate).toHaveBeenCalledWith(`user.groups.${group}`, true);
@@ -53,6 +53,6 @@ it('returns error when user is not identified', () => {
     const result = identifyUser();
 
     expect(result).toEqual({error: "No Auth Found"});
-    expect(Journal.set).not.toHaveBeenCalled();
+    expect(Journal.setContextValue).not.toHaveBeenCalled();
     expect(Journal.annotate).not.toHaveBeenCalled();
 });

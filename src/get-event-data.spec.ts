@@ -1,18 +1,19 @@
 import getEventData from './get-event-data';
 import { v4 } from 'uuid';
-import Journal from "@byaga/journal";
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import {getLambdaContext, getLambdaEvent} from "./enhance/event-details";
+import Journal from "@byaga/journal";
 
 jest.mock('uuid');
 jest.mock('@byaga/journal');
+jest.mock('./enhance/event-details');
 
 let detailedEvent: APIGatewayProxyEvent;
 
-let getSpy: jest.SpyInstance;
 const uuid = jest.mocked(v4)
 beforeEach(() => {
     jest.clearAllMocks();
-    detailedEvent = {
+    (getLambdaEvent as jest.Mock).mockReturnValue({
         headers: {
             referer: 'referer-header',
             Host: 'request.host',
@@ -33,13 +34,9 @@ beforeEach(() => {
                 sourceIp: '123.234.432.321'
             }
         },
-    } as unknown as APIGatewayProxyEvent;
-    getSpy = jest.spyOn(Journal, 'get');
-    getSpy.mockImplementation((name: string): unknown | undefined => {
-        if (name === 'event') return detailedEvent;
-        if (name === 'context') return  {}
-        return undefined;
-    })
+    });
+    (getLambdaContext as jest.Mock).mockReturnValue({});
+    detailedEvent = getLambdaEvent();
 });
 
 it('should set the path to the event path', () => {
@@ -277,4 +274,9 @@ it('should set requestTime to an ISO String representing the request epoch time'
     expect(getEventData()).toEqual(expect.objectContaining({
         requestTime: "2015-04-09T12:34:56.000Z"
     }));
+});
+
+it('should put all event data on to the journal', () => {
+    const data = getEventData()
+   expect(Journal.setContextValues).toHaveBeenCalledWith(data, true);
 });

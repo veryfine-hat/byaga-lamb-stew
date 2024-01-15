@@ -2,7 +2,7 @@ import Journal from "@byaga/journal";
 import {applyTrace} from "./apply-trace";
 
 beforeEach(() => {
-    Journal.bulkSet({
+    Journal.setContextValues({
         referrer: 'event-referrer',
         userAgent: 'event-user-agent-string',
         language: 'te-st',
