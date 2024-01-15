@@ -7,6 +7,7 @@ export { deepMerge } from './deep-merge';
 export { enhance } from './enhance';
 export { eventBody } from './event-body';
 export { flattenHeaders } from './flatten-headers';
+export { EnhanceOptions } from './enhance/EnhanceOptions';
 export { getEventData } from './get-event-data';
 export { invokeLambda } from './invoke-lambda';
 export { isObject } from './is-object';
