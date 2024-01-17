@@ -1,4 +1,4 @@
-import {APIGatewayProxyResult} from 'aws-lambda';
+import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
 import eventData from '../get-event-data';
 import Journal from '@byaga/journal';
 import {getLambdaContext, getLambdaEvent} from "./event-details";
@@ -7,8 +7,8 @@ import {getLambdaContext, getLambdaEvent} from "./event-details";
  * Record information about how the result of the lambda execution
  * @param result
  */
-export const logEventEnd = (result: APIGatewayProxyResult) => {
-    const event = getLambdaEvent();
+export const logEventEnd = <T>(result: T) => {
+    const event = getLambdaEvent() as APIGatewayProxyEvent;
     const context = getLambdaContext();
     const details = eventData();
 
@@ -18,6 +18,8 @@ export const logEventEnd = (result: APIGatewayProxyResult) => {
             return data;
         }, {});
 
+    const gatewayResult = result as APIGatewayProxyResult;
+
     Journal.annotate({
         'request.user_agent': details.userAgent,
         'request.referrer': details.referrer,
@@ -26,8 +28,8 @@ export const logEventEnd = (result: APIGatewayProxyResult) => {
         'request.ip_address': details.ipAddress,
         'request.host': details.host,
         'request.method': details.httpMethod,
-        'response.status': result ? result.statusCode : 500,
-        'response.content_length': result?.headers ? result?.headers['Content-Length'] : undefined,
+        'response.status': result ? gatewayResult.statusCode : 500,
+        'response.content_length': gatewayResult?.headers ? gatewayResult?.headers['Content-Length'] : undefined,
         'metrics.execution_time_remaining_ms': context.getRemainingTimeInMillis ? context.getRemainingTimeInMillis() : undefined,
         ...pathData
     });

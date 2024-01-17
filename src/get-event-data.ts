@@ -4,7 +4,8 @@ import Journal from "@byaga/journal";
 import {getClientIp} from "./request-ip";
 import {EventData} from "./types/EventData";
 import {isTrue} from "./is-true";
-import { APIGatewayEventDefaultAuthorizerContext
+import {
+    APIGatewayEventDefaultAuthorizerContext, APIGatewayProxyEvent
 } from "aws-lambda";
 import {APIGatewayEventIdentity, APIGatewayEventRequestContextWithAuthorizer} from "aws-lambda/common/api-gateway";
 import {getLambdaContext, getLambdaEvent} from "./enhance/event-details";
@@ -24,7 +25,7 @@ import {getLambdaContext, getLambdaEvent} from "./enhance/event-details";
  * console.log(data);
  */
 export const getEventData = (): EventData => {
-    const event = getLambdaEvent();
+    const event = getLambdaEvent() as APIGatewayProxyEvent;
     const context = getLambdaContext();
 
     const {requestContext = {} as APIGatewayEventRequestContextWithAuthorizer<APIGatewayEventDefaultAuthorizerContext>} = event;

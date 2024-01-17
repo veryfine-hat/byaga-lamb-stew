@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { Context } from 'aws-lambda';
 import Journal from '@byaga/journal';
 
 const EVENT_CONTEXT_KEY = 'event-context';
@@ -7,10 +7,10 @@ const LAMBDA_CONTEXT_CONTEXT_KEY = 'lambda-context';
 /**
  * Sets the event and context in the Journal.
  * @function setLambdaEventContext
- * @param {APIGatewayProxyEvent} event - The event object from the AWS Lambda function.
- * @param {Context} context - The context object from the AWS Lambda function.
+ * @param event - The event object from the AWS Lambda function.
+ * @param context - The context object from the AWS Lambda function.
  */
-export const setLambdaEventContext = (event: APIGatewayProxyEvent, context: Context) => {
+export const setLambdaEventContext = <T>(event: T, context: Context) => {
     Journal.setContextValue(EVENT_CONTEXT_KEY, event, true)
     Journal.setContextValue(LAMBDA_CONTEXT_CONTEXT_KEY, context || {}, true)
 }
@@ -20,7 +20,7 @@ export const setLambdaEventContext = (event: APIGatewayProxyEvent, context: Cont
  * @function getLambdaEvent
  * @returns The event object from the AWS Lambda function.
  */
-export const getLambdaEvent = () => Journal.getContextValue(EVENT_CONTEXT_KEY) as APIGatewayProxyEvent;
+export const getLambdaEvent = <T>() => Journal.getContextValue(EVENT_CONTEXT_KEY) as T;
 
 /**
  * Retrieves the context from the Journal.

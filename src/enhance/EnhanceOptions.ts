@@ -1,7 +1,5 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult} from 'aws-lambda';
-
-export interface EnhanceOptions {
+export interface EnhanceOptions<T, R> {
     service: string;
     name?: string;
-    onResponse?: (response: APIGatewayProxyResult, event: APIGatewayProxyEvent) => APIGatewayProxyResult;
+    onResponse?: (response: R, event: T) => R;
 }

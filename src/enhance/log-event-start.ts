@@ -8,7 +8,7 @@ import {getLambdaContext} from "./event-details";
  * @param {string} service - The name of the service this lambda is part of.
  * @param {string} name - The name of the lambda.
  */
-export const logEventStart = (service: string, name: string = 'lambda-handlesr') => {
+export const logEventStart = (service: string, name: string = 'lambda-handler') => {
     const context = getLambdaContext();
     const details = eventData();
 

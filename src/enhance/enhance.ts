@@ -1,4 +1,4 @@
-import {APIGatewayProxyEvent, APIGatewayProxyResult, Context} from 'aws-lambda';
+import {Context} from 'aws-lambda';
 import {serverError} from '../response';
 import Journal from '@byaga/journal';
 import {setLambdaEventContext} from "./event-details";
@@ -17,16 +17,17 @@ import {LambdaEventHandler, wrapLambdaCompletionWithPromise} from "./wrap-lambda
  * @param options - The options for enhancing the lambda.
  * @returns - The enhanced lambda.
  */
-export const enhance = (options: EnhanceOptions) => {
-    const {service, name = 'lambda-handler', onResponse = rsp => rsp} = options;
-    return (lambda: LambdaEventHandler<APIGatewayProxyEvent, APIGatewayProxyResult>) => {
+export const enhance = <T, R>(options: EnhanceOptions<T, R>) => {
+    let {service, name = 'lambda-handler'} = options;
+    return (lambda: LambdaEventHandler<T, R>) => {
+        const onResponse = options.onResponse ?? ((response: R, e: T): R => response);
         const promiseLambda = wrapLambdaCompletionWithPromise(lambda);
-        return (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
+        return (event: T, context: Context): Promise<R> => {
             return Journal.createSpan(async () => {
                 setLambdaEventContext(event, context);
                 logEventStart(service, name);
 
-                let result = serverError() as APIGatewayProxyResult
+                let result = serverError() as R
                 try {
                     result = await promiseLambda(event, context);
                 } catch (err) {
@@ -35,7 +36,7 @@ export const enhance = (options: EnhanceOptions) => {
                     logEventEnd(result);
                 }
 
-                return onResponse(result as APIGatewayProxyResult, event);
+                return onResponse(result, event);
             });
         }
     };
