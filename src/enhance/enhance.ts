@@ -18,14 +18,13 @@ import {LambdaEventHandler, wrapLambdaCompletionWithPromise} from "./wrap-lambda
  * @returns - The enhanced lambda.
  */
 export const enhance = <T, R>(options: EnhanceOptions<T, R>) => {
-    let {service, name = 'lambda-handler'} = options;
     return (lambda: LambdaEventHandler<T, R>) => {
-        const onResponse = options.onResponse ?? ((response: R, e: T): R => response);
+        const onResponse = options.onResponse ?? ((response: R): R => response);
         const promiseLambda = wrapLambdaCompletionWithPromise(lambda);
         return (event: T, context: Context): Promise<R> => {
             return Journal.createSpan(async () => {
                 setLambdaEventContext(event, context);
-                logEventStart(service, name);
+                logEventStart(options.service, options.name ?? 'lambda-handler');
 
                 let result = serverError() as R
                 try {
