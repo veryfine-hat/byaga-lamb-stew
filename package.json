@@ -9,8 +9,7 @@
     "build": "npm run clean && tsc",
     "lint": "eslint . --ext .ts",
     "test": "jest ./src",
-    "preversion": "npm run lint && npm test && npm run build",
-    "prepublishOnly": "npm run preversion"
+    "preversion": "npm run lint && npm test && npm run build"
   },
   "keywords": [
     "lambda",
@@ -41,6 +40,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://gitlab.com/very-fine-hat/lamb-stew.git"
+    "url": "https://github.com/veryfine-hat/byaga-lamb-stew"
   }
 }
